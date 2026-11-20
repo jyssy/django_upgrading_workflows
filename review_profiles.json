@@ -1,0 +1,66 @@
+{
+  "repositories": [
+    {
+      "id": "service-index-django",
+      "label": "Service Index Django",
+      "path": "service-index-uv-sand/Operations_ServiceIndex_Django",
+      "questions": [
+        "Do the viewer/editor boundaries consistently protect browser views, exports, logs, staff/contact data, event workflows, and the API?",
+        "Does the hosts API retain its authenticated GET-only contract, group authorization, explicit response fields, and safe exposure of host/contact fields?",
+        "Do CILogon/allauth signup and login policies, and the access_django_user_admin producer/consumer interface, remain intentional and fail-closed?",
+        "Do route decorators and method checks protect legacy login/logout/lock cleanup and username-based privilege helpers, and do validation/logging/tests protect inventory and contact data?",
+        "Are schema or migration changes compatible with documented multi-schema procedures and existing database consumers?",
+        "Do dependency recommendations compare the local uv environment with the infrastructure-selected production uv project and lock, without copying transient pins?",
+        "Which proposed changes affect auth, API schema, exports, personal/host data, migrations, or external package interfaces and need an explicit plan?"
+      ]
+    },
+    {
+      "id": "service-index-infrastructure",
+      "label": "Service Index Infrastructure",
+      "path": "Operations_ServiceIndex_Infrastructure",
+      "questions": [
+        "Do Terraform provider/backend/resource patterns follow current least-privilege, encryption, network exposure, and state-handling practices?",
+        "Do Ansible roles, inventory boundaries, privilege escalation, idempotency, and secret references follow current safe patterns?",
+        "Are deployment inputs and application release selection traceable to their sources of truth without hardcoded environment details?",
+        "What Ubuntu LTS release and support window do the managed hosts use, and are standard apt security updates, routine package upgrades, and required reboots handled consistently?",
+        "Is Ubuntu 24.04 still the right destination, or should the currently supported LTS target also be compared for support runway and compatibility?",
+        "If considering Ubuntu 22.04 to 24.04, do the infrastructure-declared app dependencies, packages, services, configuration, and host image remain compatible; what release-note or package-source changes need attention?",
+        "Does the infrastructure code support a parallel host/image rebuild or an in-place release upgrade, and has the chosen approach included backup/restore, maintenance window, reboot, rollback, and post-upgrade service checks in a human-reviewed plan?",
+        "Are host hardening, patching, TLS, backups, monitoring, and recovery documented with evidence?",
+        "Which recommendations require Terraform or Ansible validation that the reviewer is prohibited from running?"
+      ]
+    },
+    {
+      "id": "portal-cms-django",
+      "label": "Portal CMS Django",
+      "path": "Operations_PortalCMS_Django",
+      "questions": [
+        "Does APP_CONFIG remain the required, validated runtime-config entry point without exposing its contents or weakening production settings?",
+        "Do CILogon login/signup rules remain distinct from Resource Provider membership ownership, with page/news/resource permissions fail-closed?",
+        "Do CMS draft/review/publish locks, focus-area editor/publisher roles, and POST-only state transitions preserve the intended workflow?",
+        "Do public news feeds preserve published/active filtering, route and serialized-field contracts, cache behavior, and consumer compatibility?",
+        "Do CIDER resource views and sync preserve upstream validation, caching/fallback rules, transaction semantics, dry-run behavior, and guarded stale-group pruning?",
+        "Does healthz expose only intended readiness/version information and keep database failure details generic?",
+        "Are test commands separated from database-mutating integration scripts, and is every requested check restricted to deliberately nonproduction config?",
+        "Do dependency recommendations compare the app manifest with the infrastructure-selected uv project and lock, without copying transient pins?",
+        "Which proposed changes affect auth/group ownership, page workflow, public feeds, CIDER data, migrations, or external schemas and need an explicit plan?"
+      ]
+    },
+    {
+      "id": "portal-cms-infrastructure",
+      "label": "Portal CMS Infrastructure",
+      "path": "Operations_CMS_Infrastructure",
+      "questions": [
+        "Do Terraform resources and backends use least privilege, encryption, narrow network exposure, and safe state practices?",
+        "Do Ansible deployment tasks use safe secret references, explicit targeting, idempotent configuration, and bounded privilege?",
+        "What Ubuntu LTS release and support window do the managed hosts use, and are standard apt security updates, routine package upgrades, and required reboots handled consistently?",
+        "Is Ubuntu 24.04 still the right destination, or should the currently supported LTS target also be compared for support runway and compatibility?",
+        "If considering Ubuntu 22.04 to 24.04, do the infrastructure-declared app dependencies, packages, services, configuration, and host image remain compatible; what release-note or package-source changes need attention?",
+        "Does the infrastructure code support a parallel host/image rebuild or an in-place release upgrade, and has the chosen approach included backup/restore, maintenance window, reboot, rollback, and post-upgrade service checks in a human-reviewed plan?",
+        "Are migration enablement, static collection, and service restart behavior clearly separated and controlled?",
+        "Are Nginx, Gunicorn, PostgreSQL connectivity, TLS/certificate handling, patching, backups, and monitoring aligned with current practices?",
+        "Which follow-up validations are explicitly forbidden to the reviewer and must remain pending for an authorized operator?"
+      ]
+    }
+  ]
+}
