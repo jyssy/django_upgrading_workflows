@@ -221,3 +221,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generated per-repository review reports; keep the run directories' parent folder.
+analysis_reports/*/service-index-django.md
+analysis_reports/*/service-index-infrastructure.md
+analysis_reports/*/portal-cms-django.md
+analysis_reports/*/portal-cms-infrastructure.md

@@ -2,10 +2,10 @@
 
 ## Purpose and authority
 
-This repository creates read-only review packs for the Service Index and Portal CMS
-application and infrastructure repositories. Its output is advisory. A report,
-checklist, skill, or recommendation is not authorization to edit a target repository
-or perform an operational action.
+This repository provides a human-controlled, read-only review workflow for the Service
+Index and Portal CMS application and infrastructure repositories. Its output is
+advisory. A report, skill, or recommendation is not authorization to edit a target
+repository or perform an operational action.
 
 The workspace-level instructions in `../AGENTS.md` apply. Preserve all tracked,
 untracked, submodule, and nested-repository work. Never inspect or emit secret material.
@@ -41,21 +41,18 @@ plan, or silence. Do not make a recommendation look decided by placing it in thi
 
 ## Read-only review boundaries
 
-- `audit_runner.py` is a checklist-only runner. It may check only whether configured
-  repository roots exist; it must not traverse them, read source/configuration, invoke
-  Git, invoke a model, or execute repository commands.
 - A human-led review may inspect relevant non-secret source files read-only and must
   first read the target repository's effective `AGENTS.md`. It must not write any file
   or change Git state in a reviewed or context repository.
-- `manual_review.py` is the manually started, approval-gated entry point for a
-  human-led review. It must use `orchestrate plan` with only the four configured
-  repositories as approval-bound read-only `--add-dir` contexts, and allow writes only
-  beneath the run-specific `analysis_reports/` directory in this repository. It must
-  display the plan and complete scope, then require an exact uppercase `Y` before
-  creating a single-use approval and launching Codex. Any scope mismatch, missing
-  repository, missing CLI, or failed planning/approval step must stop before review
-  execution. Do not use repository-wide write patterns such as `--allow '**'`; allow
-  only the four exact report-file paths in that run directory.
+- Use the three-step, script-free orchestrator procedure in `README.md`. The plan must
+  include `skills/django-enhancement-recommendations.md` as explicit `--file` context,
+  bind only the four configured repositories as read-only `--add-dir` contexts, and
+  allow writes only to the four exact report files under one run-specific
+  `analysis_reports/` directory. Never use repository-wide write patterns such as
+  `--allow '**'`. The human must inspect the plan and its complete scope before running
+  `orchestrate approve --latest`, then run `orchestrate execute --latest` immediately
+  afterward without creating another plan in this repository. Any scope mismatch or
+  failed plan/approval step must stop the workflow.
 - The orchestrator CLI's Codex write-path validation is post-execution, not an
   operating-system restriction to the allowed report files. If execution reports an
   out-of-scope change, do not automatically clean or revert it; stop and ask the human
@@ -81,6 +78,23 @@ plan, or silence. Do not make a recommendation look decided by placing it in thi
   commands. Do not commit, push, merge, tag, release, deploy, restart services, or
   access production data without separate explicit authorization.
 
+## Review scope and run naming
+
+- Across the four configured targets, assess security, framework-specific best
+  practices, code readability and maintainability, and documentation quality, in
+  addition to the applicable target-specific checklist. Apply each dimension only
+  where relevant to that repository; separate verified observations, risks, and
+  proposed improvements using the matching skill's finding format.
+- Use one new directory per review run: `analysis_reports/<UTC-timestamp>/`. Use a
+  UTC timestamp in `YYYYMMDDTHHMMSSZ` form. Put exactly one Markdown report per target
+  inside it, named for the repository alias, such as `service-index-django.md` or
+  `portal-cms-infrastructure.md`. If that timestamp directory already exists, choose
+  a later timestamp; never reuse or overwrite a prior run directory.
+- A normal review plan allows only those four exact report paths. A requested edit to
+  workflow instructions or skills is separate maintenance work: scope its exact
+  workflow-repository paths explicitly and do not combine it with a review run unless
+  a new plan expressly includes both scopes. Target repositories remain read-only.
+
 ## Target-specific review skills
 
 Use the matching skill file as the review checklist:
@@ -96,7 +110,7 @@ into durable guidance; re-check the target repository's sources of truth.
 
 ## Checks and handoff
 
-Run only checks explicitly permitted by the applicable repository guidance. The review
-pack generator does not validate target projects. Before handing off any change in this
-repository, re-read the diff and report changed files, checks run and results, checks
-not run, failures, assumptions, and unresolved security or operational risks.
+Run only checks explicitly permitted by the applicable repository guidance. This
+workflow does not validate target projects. Before handoff, re-read the diff and report
+changed files, checks run and results, checks not run, failures, assumptions, and
+unresolved security or operational risks.
