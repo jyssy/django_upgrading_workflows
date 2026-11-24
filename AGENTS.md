@@ -41,12 +41,29 @@ plan, or silence. Do not make a recommendation look decided by placing it in thi
 
 ## Read-only review boundaries
 
-- The current runner may check only whether configured repository roots exist. It must
-  not traverse them, read source/configuration, invoke Git, invoke a model, or execute
-  repository commands.
+- `audit_runner.py` is a checklist-only runner. It may check only whether configured
+  repository roots exist; it must not traverse them, read source/configuration, invoke
+  Git, invoke a model, or execute repository commands.
 - A human-led review may inspect relevant non-secret source files read-only and must
   first read the target repository's effective `AGENTS.md`. It must not write any file
   or change Git state in a reviewed or context repository.
+- `manual_review.py` is the manually started, approval-gated entry point for a
+  human-led review. It must use `orchestrate plan` with only the four configured
+  repositories as approval-bound read-only `--add-dir` contexts, and allow writes only
+  beneath the run-specific `analysis_reports/` directory in this repository. It must
+  display the plan and complete scope, then require an exact uppercase `Y` before
+  creating a single-use approval and launching Codex. Any scope mismatch, missing
+  repository, missing CLI, or failed planning/approval step must stop before review
+  execution. Do not use repository-wide write patterns such as `--allow '**'`; allow
+  only the four exact report-file paths in that run directory.
+- The orchestrator CLI's Codex write-path validation is post-execution, not an
+  operating-system restriction to the allowed report files. If execution reports an
+  out-of-scope change, do not automatically clean or revert it; stop and ask the human
+  to inspect the workflow diff. Its Git-visible check may not detect ignored files.
+- The orchestrator CLI stores plan and approval records in private user-local state
+  outside its target repository. These are approval metadata, not review reports; do
+  not copy them into this repository. Review reports may be written only under
+  `analysis_reports/`.
 - Never read vault, password, credential, private-key, environment, Terraform-state,
   generated secret-bearing configuration, or other secret-bearing files. Never run a
   secret scanner over target contents as a workaround.

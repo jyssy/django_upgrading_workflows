@@ -55,6 +55,42 @@ Markdown pack per target under `analysis_reports/`. Reports contain stable repos
 aliases, root availability, review questions, and the review date. They contain no
 source file paths or excerpts.
 
+## Run an approval-gated review
+
+To have Codex inspect the four application and infrastructure repositories and write
+recommendations, run:
+
+```sh
+python3 manual_review.py
+```
+
+The script asks the orchestrator for one review plan with all four repositories bound
+as read-only context. The only approved write paths are the four exact report files in
+a new timestamped directory under `analysis_reports/`. The script displays the
+read-only proposal and full scope, then waits for exactly `Y`. Planning may consult
+existing repository RAG but does not refresh the index. Any other response cancels
+without approval or executor launch; the unapproved plan remains in private user-local
+state. After `Y`, it approves that exact plan and launches the Codex review. The review
+should produce one sanitized Markdown report per repository, separating verified
+observations, risks, and proposed improvements.
+
+The approved plan lists four exact report-file paths. Codex runs with the workflow
+repository as its writable workspace and the reviewed repositories as read-only
+contexts. The orchestrator checks changed paths after execution; this is not a
+pre-write restriction to those four files, and it does not roll back an out-of-scope
+change. If execution reports a scope violation, stop and inspect the workflow diff.
+Ignored files may not be covered by the Git-visible scope check.
+
+Plan and single-use approval records are stored by the orchestrator in private
+user-local state outside this repository; they are not copied into reports. Final
+recommendation reports are written only under `analysis_reports/`. The script does not
+refresh the RAG index. It directs the reviewer to inspect relevant non-secret source
+directly after reading each target's effective `AGENTS.md` and the matching local
+skill.
+
+This manual path does not use Launchd. The existing LaunchAgent template still runs
+only `audit_runner.py` to create question packs; it does not launch orchestrator reviews.
+
 ## macOS scheduling
 
 `launchd/com.access.django-upgrading-workflows.review.plist` is a LaunchAgent template
