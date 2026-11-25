@@ -35,6 +35,7 @@ target-specific checklists. The `--allow` list contains only the four report fil
 run may write. The `--add-dir` entries are the four read-only review repositories.
 
 ```sh
+review_run_id="$(date -u +%Y%m%dT%H%M%SZ)"
 orchestrate plan "Load and follow skills/django-enhancement-recommendations.md as the complete review brief. Plan a strictly read-only evaluation of its four configured repositories and write only the four sanitized report files listed in the allowed paths." \
   --repo-root "/Users/jelambeadmin/Documents/access-sysops/django_upgrading_workflows" \
   --file "/Users/jelambeadmin/Documents/access-sysops/django_upgrading_workflows/skills/django-enhancement-recommendations.md" \
